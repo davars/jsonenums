@@ -23,7 +23,6 @@ import (
 	"go/token"
 	"go/types"
 	"log"
-	"path/filepath"
 	"strings"
 
 	"golang.org/x/tools/go/loader"
@@ -39,20 +38,20 @@ type Package struct {
 
 // ParsePackage parses the package in the given directory and returns it.
 func ParsePackage(directory string) (*Package, error) {
-	relDir, err := filepath.Rel(filepath.Join(build.Default.GOPATH, "src"), directory)
+	pkg, err := build.ImportDir(directory, build.FindOnly)
 	if err != nil {
 		return nil, fmt.Errorf("provided directory not under GOPATH (%s): %v",
 			build.Default.GOPATH, err)
 	}
 
 	conf := loader.Config{TypeChecker: types.Config{FakeImportC: true}}
-	conf.Import(relDir)
+	conf.Import(pkg.ImportPath)
 	program, err := conf.Load()
 	if err != nil {
 		return nil, fmt.Errorf("couldn't load package: %v", err)
 	}
 
-	pkgInfo := program.Package(relDir)
+	pkgInfo := program.Package(pkg.ImportPath)
 	return &Package{
 		Name:  pkgInfo.Pkg.Name(),
 		files: pkgInfo.Files,
