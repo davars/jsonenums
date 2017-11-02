@@ -84,7 +84,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/campoy/jsonenums/parser"
+	"github.com/davars/jsonenums/parser"
 )
 
 var (
