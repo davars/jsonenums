@@ -27,10 +27,9 @@ import (
 	"os"
 	"path/filepath"
 	"text/template"
-
 	"go/format"
 
-	"github.com/campoy/jsonenums/parser"
+	"github.com/davars/jsonenums/parser"
 )
 
 func init() {
